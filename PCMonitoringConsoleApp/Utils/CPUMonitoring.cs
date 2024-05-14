@@ -44,7 +44,7 @@ namespace PCMonitoringConsoleApp.Utils
 
 
 
-        public void updateState()
+        public override void updateState()
         {
             IHardware? hardware = getFirstMatchingHardware(HardwareType.Cpu);
             if (hardware == null)
@@ -57,7 +57,7 @@ namespace PCMonitoringConsoleApp.Utils
             int SumOfFrequency = 0;
             int coresCount = 0;
 
-            foreach (var sensor in hardware.Sensors)
+            foreach (ISensor sensor in hardware.Sensors)
             {
                 //Console.WriteLine("Sensors name: {0}, Type: {1}, Value: {2}", sensor.Name, sensor.SensorType, sensor.Value.GetValueOrDefault());
                 if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))

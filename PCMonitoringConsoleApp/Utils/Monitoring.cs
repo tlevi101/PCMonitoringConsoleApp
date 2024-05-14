@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PCMonitoringConsoleApp.Utils
 {
 
-    internal class Monitoring
+    abstract class Monitoring
     {
         static Computer computer = new Computer()
         {
@@ -41,13 +41,34 @@ namespace PCMonitoringConsoleApp.Utils
             return null;
         }
 
-        public void listAllHardware()
+        protected IHardware? getFirstMatchingHardware(HardwareType[] types)
         {
+            foreach (IHardware hardware in computer.Hardware)
+            {
+                foreach (HardwareType type in types)
+                {
+                    if (hardware.HardwareType == type)
+                    {
+                        return hardware;
+                    }
+                }
+
+            }
+
+            return null;
+        }
+
+        public static void listAllHardware()
+        {
+            computer.Open();
+            computer.Accept(new Visitor());
             foreach (IHardware hardware in computer.Hardware)
             {
                 Console.WriteLine("Hardware: {0}, Type: {1}", hardware.Name, hardware.HardwareType);
             }
         }
+
+        abstract public void updateState();
     }
 
 
