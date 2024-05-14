@@ -29,15 +29,19 @@ namespace PCMonitoringConsoleApp.Utils
         {
             updateState();
 
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000"))
+            try
             {
-                if (key != null)
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000"))
                 {
-                    object o = key.GetValue("HardwareInformation.qwMemorySize");
-                    if (o != null)
-                        MaxMemory = Math.Round((long)o / (1024 * 1024) / 1024d, 2);
+                    if (key != null)
+                    {
+                        object o = key.GetValue("HardwareInformation.qwMemorySize");
+                        if (o != null)
+                            MaxMemory = Math.Round((long)o / (1024 * 1024) / 1024d, 2);
+                    }
                 }
             }
+            catch { }
         }
 
         public override void updateState()
